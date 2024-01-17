@@ -1,8 +1,10 @@
 # %%
 import numpy as np
-from qutip import Qobj, qeye
+from qutip import *
 from scipy.linalg import sqrtm
 import time
+import matplotlib.pyplot as plt
+import matplotlib as mpl
 
 
 def PSD_MLE_rho(rho):  # -> pos semi definite rho, given hermitian with trace 1
@@ -216,9 +218,11 @@ def plot_wigner(rho, fig=None, ax=None):
         W,
         100,
         norm=mpl.colors.Normalize(-wlim, wlim),
-        cmap=mpl.cm.get_cmap("RdBu"),
+        cmap=mpl.cm.get_cmap("coolwarm"),
     )
-    ax.set_xlabel(r"$x_1$", fontsize=16)
-    ax.set_ylabel(r"$x_2$", fontsize=16)
+    # ax.set_xlabel(r"$x_1$", fontsize=16)
+    # ax.set_ylabel(r"$x_2$", fontsize=16)
+    plt.xticks(visible=False)
+    plt.yticks(visible=False)
 
     return fig, ax
