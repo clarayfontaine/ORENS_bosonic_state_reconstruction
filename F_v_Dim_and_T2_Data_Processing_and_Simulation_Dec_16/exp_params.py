@@ -1107,6 +1107,7 @@ pe_after_grape_sim_avg = np.mean(pes_after_grape_sim[:, 1].astype(float))
 
 # BAD T2S USED FOR EXPERIMENT
 badt2_list = np.array([22.38912, 10.43408, 3.481396, 1.02416, 0.53468]) * 1e3
+badt2_err =  np.array([0.4461211121133353, 0.3114348535335567, 0.11550230998436464, 0.06189971685022287, 0.02755214492129271]) * 1e3
 
 # LIST OF ALL STATES USED IN D6
 master_state_list_D6 = np.asarray(
