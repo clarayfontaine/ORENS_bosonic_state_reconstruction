@@ -1107,7 +1107,18 @@ pe_after_grape_sim_avg = np.mean(pes_after_grape_sim[:, 1].astype(float))
 
 # BAD T2S USED FOR EXPERIMENT
 badt2_list = np.array([22.38912, 10.43408, 3.481396, 1.02416, 0.53468]) * 1e3
-badt2_err =  np.array([0.4461211121133353, 0.3114348535335567, 0.11550230998436464, 0.06189971685022287, 0.02755214492129271]) * 1e3
+badt2_err = (
+    np.array(
+        [
+            0.4461211121133353,
+            0.3114348535335567,
+            0.11550230998436464,
+            0.06189971685022287,
+            0.02755214492129271,
+        ]
+    )
+    * 1e3
+)
 
 # LIST OF ALL STATES USED IN D6
 master_state_list_D6 = np.asarray(
@@ -1174,6 +1185,7 @@ cavT1 = 1.06e6
 nbar_cav = 0.03
 nbar_qb = 0.009
 
+low_chi_T2 = 20e3
 
 c_ops_qc = [
     # Qubit Relaxation
@@ -1189,15 +1201,22 @@ c_ops_qc = [
 ]
 
 chi = 1.423e-3
-chi_prime = 15.76e-6
 Kerr = 6e-6
 alpha = 175.31e-3
+
+low_chi = 35e-6
+Kerr_low_chi = Kerr / 40
 
 
 H0 = (
     -2 * np.pi * chi * Qd * Q * Cd * C
-    # - 2 * np.pi * chi_prime / 2 * Qd * Q * Cd * Cd * C * C # got rid of chi_prime for simulation
     - 2 * np.pi * Kerr / 2 * Cd * Cd * C * C
+    - 2 * np.pi * alpha / 2 * Qd * Qd * Q * Q
+)
+
+H0_low_chi = (
+    -2 * np.pi * low_chi * Qd * Q * Cd * C
+    - 2 * np.pi * Kerr_low_chi / 2 * Cd * Cd * C * C
     - 2 * np.pi * alpha / 2 * Qd * Qd * Q * Q
 )
 
@@ -1211,6 +1230,18 @@ freq_detune_Q = np.array(
         chi * -5,
         chi * -6,
         chi * -7,
+    ]
+)
+freq_detune_Q_low_chi = np.array(
+    [
+        0,
+        low_chi * -1,
+        low_chi * -2,
+        low_chi * -3,
+        low_chi * -4,
+        low_chi * -5,
+        low_chi * -6,
+        low_chi * -7,
     ]
 )
 
@@ -1229,6 +1260,7 @@ def power_rabi_amp_calibration(sigma, chop):
             np.sqrt(2 / np.pi) / erf(np.sqrt(2)) * np.pi / (4 * sigma) / 2 / np.pi
         )  # initial guess
         A0 = A
+        # A0 = 0.00041795955023513456 / 40
 
         A *= Ax
 
@@ -1260,7 +1292,8 @@ def power_rabi_amp_calibration(sigma, chop):
             ue * ue.dag(),
         ]
 
-        results = mesolve(H, rhoq, tlist, c_ops=c_ops_q, e_ops=e_ops)
+        options = Options(max_step=4, nsteps=1e6)
+        results = mesolve(H, rhoq, tlist, c_ops=c_ops_q, e_ops=e_ops, options=options)
 
         output += [
             results.expect[0][-1],
@@ -1271,6 +1304,7 @@ def power_rabi_amp_calibration(sigma, chop):
 
 
 sigma_Q, chop_Q = [250, 4]
+sigma_Q_low_chi, chop_Q_low_chi = [10000, 4]
 sigma_W, chop_W = [16, 4]
 
 
@@ -1279,6 +1313,15 @@ def pulse_Q(t, *arg):
     t0 = sigma_Q * chop_Q / 2
 
     g = np.exp(-1 / 2 * (t - t0) ** 2 / sigma_Q**2)
+
+    return g
+
+
+def pulse_Q_low_chi(t, *arg):
+    # global sigma, chop
+    t0 = sigma_Q_low_chi * chop_Q_low_chi / 2
+
+    g = np.exp(-1 / 2 * (t - t0) ** 2 / sigma_Q_low_chi**2)
 
     return g
 
@@ -1295,7 +1338,8 @@ def pulse_W(t, *arg):
 # With a set of parameters, just need to call the power_rabi_amp_calibration once and set the value manually like shown here
 # This wlil speed up the import of this class by several seconds
 
-# power_rabi_A_Q = power_rabi_amp_calibration(sigma_Q, chop_Q)
+# power_rabi_A_Q_low_chi = power_rabi_amp_calibration(sigma_Q_low_chi, chop_Q_low_chi)
 # power_rabi_A_W = power_rabi_amp_calibration(sigma_W, chop_W)
+power_rabi_A_Q_low_chi = 1.2269645887584445e-05
 power_rabi_A_Q = 0.00041795955023513456
 power_rabi_A_W = 0.006530617972423978
