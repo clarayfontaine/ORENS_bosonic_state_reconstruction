@@ -4,7 +4,7 @@ import time
 import numpy as np
 import matplotlib.pyplot as plt
 from qutip import destroy, Qobj, rand_ket
-from QN_regression import QN_regression
+from helpers.QN_regression import QN_regression
 import exp_params
 
 start_time = time.time()  # checking how long the code takes
@@ -19,6 +19,7 @@ a = destroy(cdim)  # annihilation for cavity
 def Dis(alpha):
     U = (alpha * a.dag() - np.conj(alpha) * a).expm()
     return U
+
 
 AL = -exp_params.disp_points
 
@@ -78,7 +79,7 @@ Error, beta = QN_regression(X_R, Y_R, lamb)
 M = beta[:, 1 : exp_params.nD + 1]  # the map
 W = np.matmul(np.linalg.inv(np.matmul(np.transpose(M), M)), np.transpose(M))
 eta = np.linalg.norm(M, 2) * np.linalg.norm(W, 2)
-print(eta)
+print("CD = ", eta)
 
 print("")
 print("--- %s seconds ---" % (time.time() - start_time))

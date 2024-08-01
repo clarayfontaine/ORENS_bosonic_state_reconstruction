@@ -2,8 +2,8 @@ import numpy as np
 from qutip import *
 import scipy as sc
 
-
-which_function = "Q"
+# Choose "ORENS" or "Wigner"
+which_ORENS_or_W = "ORENS"
 
 D = 6
 nD = D**2 - 1
@@ -255,8 +255,8 @@ elif D == 8:
 cat_state_list = np.array(["cat-eve-1", "cat-nmp-1", "cat-nop-1", "cat-odd-1"])
 
 # DISPLACEMENT POINTS
-if nD == D**2 - 1 and which_function == "Q":
-    print("USING Q-FUNCTION POINTS")
+if nD == D**2 - 1 and which_ORENS_or_W == "ORENS":
+    print("USING ORENS OBSERVABLES")
     if D == 6:
         disp_points = np.array(
             [
@@ -542,8 +542,8 @@ if nD == D**2 - 1 and which_function == "Q":
         TM5 = 0
         TM6 = 0
         TM7 = nD
-elif nD == 2 * (D**2 - 1) and which_function == "Q":
-    print("USING Q-FUNCTION POINTS")
+elif nD == 2 * (D**2 - 1) and which_ORENS_or_W == "ORENS":
+    print("USING ORENS OBSERVABLES")
     if D == 6:
         disp_points = np.array(
             [
@@ -770,8 +770,8 @@ elif nD == 2 * (D**2 - 1) and which_function == "Q":
         TM3 = 0
         TM4 = 0
         TM5 = 0
-elif which_function == "W":
-    print("USING W-FUNCTION POINTS")
+elif which_ORENS_or_W == "W":
+    print("USING WIGNER OBSERVABLES")
     if D == 6:
         # for D6
         disp_points = np.array(
@@ -1336,7 +1336,7 @@ def pulse_W(t, *arg):
 
 
 # With a set of parameters, just need to call the power_rabi_amp_calibration once and set the value manually like shown here
-# This wlil speed up the import of this class by several seconds
+# This will speed up the import of this class by several seconds
 
 # power_rabi_A_Q_low_chi = power_rabi_amp_calibration(sigma_Q_low_chi, chop_Q_low_chi)
 # power_rabi_A_W = power_rabi_amp_calibration(sigma_W, chop_W)
