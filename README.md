@@ -18,7 +18,7 @@ Refer to Appendix D1 and D2 of the manuscript for more details.
 For CV systems, when the state does not extend beyond a certain dimension $D$, its Hilbert space can be truncated. As such, only $D^2-1$ independent real parameters must be obtained from measurements for informational completeness. For ORENS, a minimal set of $D^2-1$ independent measurement observables are optimized for each dimension $D$ that can effectively reconstruct any arbitrary state of dimension $D$. For a given $D$, the set of measurements consists of $D^2-1$ independent displacements each followed by a photon number measurement. To obtain this set of displacements, we sweep over the excitation number $n \in [1, D-1]$, where for each set, we run a gradient-descent algorithm over the set of displacements $\{\alpha_k\}^{D^2-1}_{k=1}$ to minimize the condition number of the measurement matrix M.
 
 
-These scripts below returns the set of optimized displacements for ORENS given a photon number to sample, and the set of optimized displacements for the benchmark Wigner tomography. These optimized displacements are obtained for a given dimension $D$, and they will allow us to reconstruct any arbitrary state bounded by the dimension $D$.
+These scripts below returns the set of optimized displacements for ORENS given a choice of photon numbers to sample, and the set of optimized displacements for the benchmark Wigner tomography. These optimized displacements are obtained for a given dimension $D$, and they will allow us to reconstruct any arbitrary state bounded by the dimension $D$.
 
     optimize_observables_ORENS.py
     optimize_observables_W.py
